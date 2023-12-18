@@ -67,7 +67,7 @@ services:
   privoxy:
     image: splazit/privoxy-alpine
     volumes:
-      - privoxy-config:/etc/privoxy/config
+      - ./privoxy-config:/etc/privoxy/config
     depends_on:
       - tor
   browser:
