@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.10
 WORKDIR /crawler
 COPY crawler/requirements.txt requirements.txt
 RUN apt update && apt install git -y && apt install libgomp1 libgbm-dev libasound2 -y
