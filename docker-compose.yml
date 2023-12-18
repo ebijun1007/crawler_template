@@ -20,9 +20,9 @@ services:
       - browser
     tty: true
     volumes:
-      - ./crawler:/crawler
+      - .:/crawler
     env_file:
-      - ./crawler/.env
+      - .env
   dynamodb:
     image: amazon/dynamodb-local:latest
     user: root
@@ -67,7 +67,7 @@ services:
   privoxy:
     image: splazit/privoxy-alpine
     volumes:
-      - ./crawler/docker/privoxy-config:/etc/privoxy/config
+      - privoxy-config:/etc/privoxy/config
     depends_on:
       - tor
   browser:
