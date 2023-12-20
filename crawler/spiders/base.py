@@ -25,8 +25,11 @@ class BaseSpider(ABC, scrapy.Spider):
         )
 
     def tor_request(self, **kwargs):
+        proxy = "http://privoxy:8118"
+        meta = kwargs.pop('meta', {})
+        meta['proxy'] = proxy
         return scrapy.Request(
             **kwargs,
-            meta={'proxy': self.settings.get('HTTP_PROXY')}
+            meta=meta
         )
 
