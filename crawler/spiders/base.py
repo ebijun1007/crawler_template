@@ -1,13 +1,26 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 import scrapy
 
 class BaseSpider(ABC, scrapy.Spider):
     user_google_cache = False
-    @abstractmethod
+    name = "base"
+    allowed_domains = []
+    custom_settings = {
+        # "DOWNLOADER_MIDDLEWARES": {
+        #     'crawler.middlewares.SeleniumMiddleware': 900
+        # },
+        "ITEM_PIPELINES": {
+            'crawler.pipelines.CsvPipeline': 300,
+        },
+        # "HTTPCACHE_ENABLED": True,
+        # "HTTPCACHE_EXPIRATION_SECS": 0,
+        # "HTTPCACHE_DIR": "httpcache",
+        # "HTTPCACHE_IGNORE_HTTP_CODES": [],
+        # "HTTPCACHE_STORAGE": "scrapy.extensions.httpcache.FilesystemCacheStorage"
+    }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.allowed_domains.append('webcache.googleusercontent.com')
+    def start_requests(self):
+        pass
 
     def parse(self, response):
         pass
