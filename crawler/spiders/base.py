@@ -25,6 +25,20 @@ class BaseSpider(ABC, scrapy.Spider):
     def parse(self, response):
         pass
 
+    def get_next_page(self, url, page_params="page"):
+        parsed = urlparse.urlparse(url)
+        query_dict = urlparse.parse_qs(parsed.query)
+        if page_params in query_dict:
+            next_page_number = int(query_dict[page_params][0]) + 1
+            if next_page_number > 100:
+                return
+            query_dict[page_params] = str(next_page_number)
+        else:
+            query_dict[page_params] = ["2"]
+        return urlparse.urlunparse(
+            parsed._replace(query=urlparse.urlencode(query_dict, doseq=True))
+        )
+
     def request(self, **kwargs):
         return scrapy.Request(**kwargs)
 
