@@ -1,4 +1,5 @@
 from abc import ABC
+import urllib.parse as urlparse
 import scrapy
 
 class BaseSpider(ABC, scrapy.Spider):
