@@ -1,2 +1,2 @@
 from .base import BaseItemPipeline
-from .csv_pipeline import CsvPipeline
+from .csv_pipelines import CsvPipeline
