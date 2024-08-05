@@ -5,63 +5,13 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: scrapy
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: scrapy
-      MYSQL_USER: docker
-      MYSQL_PASSWORD: docker
-      WAIT_COMMAND: "$$(curl --write-out %{http_code} --silent --output /dev/null http://elasticsearch:9200/_cat/health?h=st) = 200"
-      WAIT_SLEEP: 2
-      WAIT_LOOPS: 10
     depends_on:
-      - dynamodb
-      - elasticsearch
       - privoxy
-      - browser
     tty: true
     volumes:
       - .:/crawler
     env_file:
       - .env
-  dynamodb:
-    image: amazon/dynamodb-local:latest
-    user: root
-    command: -jar DynamoDBLocal.jar -sharedDb -dbPath /data
-    volumes:
-      - dynamodb-local-data:/data
-  dynamodb-admin:
-    image: aaronshaf/dynamodb-admin:latest
-    environment:
-      - DYNAMO_ENDPOINT=dynamodb:8000
-    ports:
-      - 8001:8001
-    depends_on:
-      - dynamodb
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.0.0
-    ports:
-      - 9200:9200
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - es-data:/usr/share/elasticsearch/data
-    command:
-      - /bin/sh
-      - -c
-      - "./bin/elasticsearch-plugin list | grep -q analysis-kuromoji|| ./bin/elasticsearch-plugin install analysis-kuromoji;./bin/elasticsearch-plugin list | grep -q analysis-icu|| ./bin/elasticsearch-plugin install analysis-icu;/usr/local/bin/docker-entrypoint.sh"
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.0.0
-    environment:
-      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
-    ports:
-       - 5601:5601
-    depends_on:
-      - elasticsearch
   tor:
     image: osminogin/tor-simple
   privoxy:
@@ -70,9 +20,3 @@ services:
       - ./privoxy-config:/etc/privoxy/config
     depends_on:
       - tor
-  browser:
-    image: seleniarm/standalone-chromium
-    shm_size: 2gb
-volumes:
-  dynamodb-local-data:
-  es-data:

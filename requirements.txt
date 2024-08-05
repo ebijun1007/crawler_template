@@ -1,5 +1,5 @@
 scrapy
 requests
 scrapy-tor-proxy-rotation
-selenium
 pandas
+scrapy-playwright
